@@ -4,38 +4,39 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
 import javax.swing.JOptionPane;
 
-import com.mysql.fabric.xmlrpc.base.Array;
-
-import br.com.fiap.dao.DAO;
 import br.com.fiap.dao.DepartamentoDAO;
 import br.com.fiap.dao.EmpresaDAO;
-import br.com.fiap.dao.EntityManagerFactorySingleton;
 import br.com.fiap.dao.FuncionarioDAO;
+import br.com.fiap.entity.Departamento;
+import br.com.fiap.entity.Empresa;
 import br.com.fiap.entity.Funcionario;
+import br.com.fiap.impl.DepartamentoDAOImpl;
+import br.com.fiap.impl.EmpresaDAOImpl;
 import br.com.fiap.impl.FuncionarioDAOImpl;
 
 public class Command {
-	private String optioin;
 	private EmpresaDAO empresaDAO;
 	private DepartamentoDAO departamentoDAO;
 	private FuncionarioDAO funcionarioDAO;
 	private List<Funcionario> listFuncionarios;
-	private EntityManagerFactory entityManagerFactory = EntityManagerFactorySingleton.getInstance();
-	private EntityManager em = entityManagerFactory.createEntityManager();
+	private List<Departamento> listDeptos;
+	private EntityManager em;
 
-	public void step1() {
+	public Command(EntityManager em) {
+		this.em = em;
+	}
+	
+	public void popularFunc() {
 		listFuncionarios = new ArrayList<>();
-		JOptionPane jOptionPane = new JOptionPane();
-		String qtFuncionarios = jOptionPane.showInputDialog("Quantos funcionarios deseja incluir?");
+		String qtFuncionarios = JOptionPane.showInputDialog("Quantos funcionarios deseja incluir?");
 		for (int i = 0; i < Integer.valueOf(qtFuncionarios); i++) {
 			Funcionario funcionario = new Funcionario();
-			String nome = jOptionPane.showInputDialog("Inclua os funcionarios ");
-			String cpf = jOptionPane.showInputDialog("Inclua os funcionarios ");
-			String endereco = jOptionPane.showInputDialog("Inclua os funcionarios ");
-			String telefone = jOptionPane.showInputDialog("Inclua os funcionarios ");
+			String nome = JOptionPane.showInputDialog("Digite o nome " + i + ":  ");
+			String cpf = JOptionPane.showInputDialog("Digite o cpf " + i + ":  ");
+			String endereco = JOptionPane.showInputDialog("Digite o endereco" + i + ":  ");
+			String telefone = JOptionPane.showInputDialog("Digite o telefone " + i + ":  ");
 
 			funcionario.setCpf(cpf);
 			funcionario.setEndereco(endereco);
@@ -44,15 +45,51 @@ public class Command {
 			listFuncionarios.add(funcionario);
 		}
 	
-		this.step2();
+		this.incluirFunc();
 	}
 
-	private void step2(){
+	private void incluirFunc(){
 		this.funcionarioDAO = new FuncionarioDAOImpl(this.em);
 		
 		for (Funcionario funcionario : listFuncionarios) {
 			this.funcionarioDAO.insert(funcionario);
+			System.out.println("Funcionario " + funcionario.getNome() + " incluido com sucesso");
 		}
+	}
+	
+	public void popularDepartamento(){
+		Departamento depto = new Departamento();
+		listDeptos = new ArrayList<>();
+		
+		String nomeDepto = JOptionPane.showInputDialog("Digite o nome do depto: ");
+		String local = JOptionPane.showInputDialog("Digite o local do depto: Ex.:4 andar ");
+		
+		depto.setNome(nomeDepto);
+		depto.setLocalizacao(local);
+		depto.setFuncionarios(listFuncionarios);
+		
+		this.departamentoDAO = new DepartamentoDAOImpl(this.em);
+		
+		departamentoDAO.insert(depto);
+		
+		listDeptos.add(depto);
+		
+	}
+	
+	public void popularEmpresa(){
+		Empresa empresa = new Empresa();
+		
+		String nomeEmpresa = JOptionPane.showInputDialog("Digite o nome da empresa: ");
+		String cnpj = JOptionPane.showInputDialog("Digite o CNPJ da empresa: ");
+		
+		empresa.setNome(nomeEmpresa);
+		empresa.setCnpj(cnpj);
+		empresa.setDepartamentos(listDeptos);
+
+		empresaDAO = new EmpresaDAOImpl(this.em);
+		
+		empresaDAO.insert(empresa);
+		
 	}
 	
 	
