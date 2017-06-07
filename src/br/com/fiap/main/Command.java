@@ -120,4 +120,25 @@ public class Command {
 		
 	}
 	
+	public Empresa buscaEmpresa(int id){
+		empresaDAO = new EmpresaDAOImpl(this.em);
+		
+		return empresaDAO.findById(id);
+		
+	}
+	
+	public Departamento buscaDepto(int id){
+		departamentoDAO = new DepartamentoDAOImpl(this.em);
+		
+		return departamentoDAO.findById(id);
+		
+	}
+	
+	public Funcionario buscaFuncionario(int id){
+		funcionarioDAO = new FuncionarioDAOImpl(this.em);
+		
+		return funcionarioDAO.findById(id);
+		
+	}
+	
 }
