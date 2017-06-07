@@ -85,4 +85,10 @@ public class Departamento implements Serializable{
 		this.funcionarios = funcionarios;
 	}
 
+	@Override
+	public String toString() {
+		return "Departamento [id=" + id + ", nome=" + nome + ", localizacao=" + localizacao + ", funcionarios="
+				+ funcionarios + "]";
+	}
+
 }

@@ -92,7 +92,32 @@ public class Command {
 		
 	}
 	
+	public List<Empresa> listarEmpresas(){
+		empresaDAO = new EmpresaDAOImpl(this.em);
+		
+		List<Empresa> lista = empresaDAO.listarTodas();
+		
+		return lista;
+		
+	}
 	
 	
+	public List<Departamento> listarDepartamentos(){
+		departamentoDAO = new DepartamentoDAOImpl(this.em);
+		
+		List<Departamento> lista = departamentoDAO.listarTodos();
+		
+		return lista;
+		
+	}
+	
+	public List<Funcionario> listarFuncionarios(){
+		funcionarioDAO = new FuncionarioDAOImpl(this.em);
+		
+		List<Funcionario> lista = funcionarioDAO.listarTodos();
+		
+		return lista;
+		
+	}
 	
 }

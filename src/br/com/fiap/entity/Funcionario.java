@@ -93,14 +93,10 @@ public class Funcionario implements Serializable{
 		this.telefone = telefone;
 	}
 
-//	public Departamento getDepartamento() {
-//		return departamento;
-//	}
-//
-//
-//
-//	public void setDepartamento(Departamento departamento) {
-//		this.departamento = departamento;
-//	}
-
+	@Override
+	public String toString() {
+		return "Funcionario [id=" + id + ", nome=" + nome + ", cpf=" + cpf + ", endereco=" + endereco + ", telefone="
+				+ telefone + "]";
+	}
+	
 }
